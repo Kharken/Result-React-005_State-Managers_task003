@@ -1,12 +1,13 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { GroupContactsCard } from 'src/components/GroupContactsCard';
-import { useAppSelector } from 'src/hooks/useAppSelector';
-import { useGetGroupsQuery } from 'src/store/reducers/groups-reducer';
+import { store } from 'src/store/store';
+import { observer } from 'mobx-react';
 
-export const GroupListPage = memo(() => {
-  const {data: groupsList} = useGetGroupsQuery()
+export const GroupListPage = observer((() => {
+  const groupsList = store.groups;
   return (
+
     <Row xxl={4}>
       {groupsList && groupsList.map((groupContacts) => (
         <Col key={groupContacts.id}>
@@ -18,4 +19,4 @@ export const GroupListPage = memo(() => {
       ))}
     </Row>
   );
-});
+}));

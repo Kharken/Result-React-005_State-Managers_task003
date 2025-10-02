@@ -15,6 +15,7 @@ interface FilterFormProps extends FormikConfig<Partial<FilterFormValues>> {
 
 export const FilterForm = memo<FilterFormProps>(
   ({ onSubmit, initialValues = {}, groupContactsList }) => {
+
     return (
       <Formik
         initialValues={initialValues}

@@ -1,22 +1,24 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { ContactCard } from 'src/components/ContactCard';
-import { useAppSelector } from 'src/hooks/useAppSelector';
 import { ContactDto } from 'src/types/dto/ContactDto';
+import {store} from 'src/store/store';
+import {observer} from 'mobx-react';
 
-export const FavoritListPage = memo(() => {
-  const favoriteContacts = useAppSelector(state => state.favorites);
+
+export const FavoritListPage = observer((() => {
+  const favoriteContacts: ContactDto[] = store.favorites;
 
   return (
     <Row xxl={4} className="g-4">
       {favoriteContacts.map((contact) => (
-        <Col key={contact}>
+        <Col key={contact.id}>
           <ContactCard
-            contactId={contact}
+            contactId={contact.id}
             withLink
           />
         </Col>
       ))}
     </Row>
   );
-});
+}));

@@ -1,18 +1,17 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { GroupContactsDto } from 'src/types/dto/GroupContactsDto';
 import { GroupContactsCard } from 'src/components/GroupContactsCard';
 import { Empty } from 'src/components/Empty';
 import { ContactCard } from 'src/components/ContactCard';
-import { useAppSelector } from 'src/hooks/useAppSelector';
-import { useGetGroupsQuery } from 'src/store/reducers/groups-reducer';
-import { useGetContactsQuery } from 'src/store/reducers/contacts-reducer';
+import {store} from 'src/store/store';
+import {observer} from 'mobx-react';
 
-export const GroupPage = memo(() => {
+export const GroupPage = observer(() => {
+  const contactsList = store.contacts
+  const groupsList = store.groups
   const { groupId } = useParams<{ groupId: string }>();
-  const { data: contactsList } = useGetContactsQuery()
-  const { data: groupsList } = useGetGroupsQuery()
   const [findGroup, setFindGroup] = useState<GroupContactsDto | undefined>(
     undefined,
   );

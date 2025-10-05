@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './MainApp.scss';
 import { ThemeProvider } from 'react-bootstrap';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -10,8 +10,15 @@ import {
   GroupListPage,
   GroupPage,
 } from '../../pages';
+import { store } from 'src/store/store';
 
 export const MainApp = () => {
+  useEffect(() => {
+    store.getContacts();
+    store.getGroups();
+    store.getFavorites();
+  }, []);
+
   return (
     <ThemeProvider
       breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}

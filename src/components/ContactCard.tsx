@@ -1,31 +1,37 @@
 import { ContactDto } from 'src/types/dto/ContactDto';
 import { Button, Card, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import {store} from 'src/store/store';
-import {observer} from 'mobx-react';
+import { store } from 'src/store/store';
+import { observer } from 'mobx-react';
 
 interface ContactCardProps {
   contactId: string;
   withLink?: boolean;
 }
 
-export const ContactCard = observer((({ contactId, withLink }: ContactCardProps) => {
-  const contactsList = store.contacts
+export const ContactCard = observer(({ contactId, withLink }: ContactCardProps) => {
+  const contactsList = store.contacts;
   const contact: ContactDto | undefined = contactsList && contactsList.find((contact) => contact.id === contactId);
-  // const favorites = useAppSelector(state => state.favorites);
-  // const isInFavorites = contact && favorites.some(fav => fav === contact.id);
+
+  const isInFavorites = contact ? store.favorites.some(fav => fav.id === contactId) : false;
 
   if (!contact) {
     return null;
   }
 
   const { photo, id, name, phone, birthday, address } = contact;
+
+  const handleToggleFavorite = () => {
+    if (isInFavorites) {
+      store.removeFromFavorites(id);
+    } else {
+      store.addToFavorites(id);
+    }
+  };
+
   return (
     <Card key={id}>
-      <Card.Img
-        variant="top"
-        src={photo}
-      />
+      <Card.Img variant="top" src={photo} />
       <Card.Body>
         <Card.Title>
           {withLink ? <Link to={`/contact/${id}`}>{name}</Link> : name}
@@ -33,15 +39,13 @@ export const ContactCard = observer((({ contactId, withLink }: ContactCardProps)
         <Card.Body>
           <ListGroup>
             <Button
-              variant={contact.isFavorite ? 'success' : 'outline-primary'}
+              variant={isInFavorites ? 'success' : 'outline-primary'}
+              onClick={handleToggleFavorite}
             >
-              Add to favorites
+              {isInFavorites ? 'Remove from favorites' : 'Add to favorites'}
             </Button>
             <ListGroup.Item>
-              <Link
-                to={`tel:${phone}`}
-                target="_blank"
-              >
+              <Link to={`tel:${phone}`} target="_blank">
                 {phone}
               </Link>
             </ListGroup.Item>
@@ -52,4 +56,4 @@ export const ContactCard = observer((({ contactId, withLink }: ContactCardProps)
       </Card.Body>
     </Card>
   );
-}));
+});
